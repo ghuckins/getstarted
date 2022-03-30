@@ -9,39 +9,54 @@ Have fun and ask someone before beating your head against a wall.
     - [Python Installation](#python-lesson-1-python-installation-cowboy_hat_face)
     - [Virtual Environments](#python-lesson-2-virtual-environments-disguised_face)
     - [Python Basics \& Jupyter](#python-lesson-3-python-basics--jupyter-astronaut)
+    - [Anatomy of a Package](#python-lesson-4-anatomy-of-a-package)
 1. [Version Control: Git \& GitHub.com](#version-control-git--githubcom-octocat)
+    - [Analogy to "tracking changes"](#git-lesson-1-version-control-a-tracking-changes-analogy-bowtie)
+    - [Getting Git](#git-lesson-2-git-setup-and-first-steps-hugs)
+    - [Git Comfortable (Basic Usage)](#git-lesson-3-git-comfortable-woman_technologist)
+    - [The `git` GitHub.com relationship](#git-lesson-4-the-git-github-relationship)
 
 # About This Repo
 
-Scientific computing comprises a broad set of tools and techniques: programming
-languages, algorithms, statistical learning, version control, &c. It is easy to
-get bogged down in the details and forget that these tools are (for the most
-part) a means to a scientifically relevant end.
+A modern scientific computing workflow utilizes a broad set of tools and
+techniques: programming languages, algorithms, statistical learning, version
+control, &c. It is easy to get bogged down in the details and forget that these
+tools are (for the most part) a means to a scientifically relevant end.
 
-This README.md will help you get started by guiding you through a few core
+This README.md will guide you through python3-based scientific computing
 concepts. If it is your first time going through it, take your time, trust the
 process, and go in order. Along the way you will learn `python3` coding basics
 such as syntax and common packages like `numpy`, but our real focus is on the
 supporting fundamentals which are often learned piecemeal or too late. These
 fundamentals can be hard to learn because they aren't as googleable
-as code snippets and packages of tools. If you are a bit fuzzy on the basics (e.g.
-environments, imports, versions, &c.) or you are new to _scientific
-computing_ with `python3` this content should put you on track to improve your skills.
+as code snippets or packages of tools. If you are a bit fuzzy on the basics (e.g.
+environments, imports, versions, &c.) or you are new to scientific
+computing with `python3` this content should put you on track to improve your skills.
+
+It is important to mention that this content aims to 'teach a person to fish',
+rather than 'give a person a fish'. Not every concept will receive an
+explicit didactic breakdown. The sprinkling of more advanced tricks and syntax aren't
+intended to confuse the reader, these are intended to expose the reader and
+encourage them to dive a bit deeper. If you would like to learn more about any
+of the concepts we raise there are so many GREAT resources such as
+[RealPython.com][ln_RealPython_home], ['Learn Python the Hard
+Way'][ln_learnpythonthehardway], and [CS106A][ln_programmingmethods].
 
 Additionally, the format of this _repository_ is a bonus; it stands as an
 example (or 'template') for _packaging_ your own python code in a `pip
 install`-able format and tracking it using `git` and GitHub. Organizing code
 into a [python package][ln_RealPython_packages] _<--you don't have to read all
-that now, but [RealPython.com][ln_RealPython_home] is a great resource_, and
+that now, but it is an example of a [RealPython.com][ln_RealPython_home]
+resource_, and
 storing them using GitHub, will save you a lot of headaches in the future. This
-template can be reused as a scaffold, replace our stuff with your
+template can be reused as a scaffold; replace our stuff with your
 stuff to make a `pip`-installable package of your own. We will explain that in
 more detail later.
 
-If you just [NEED TO LEARN PYTHON NOW][ln_python_colab] you can establish yourself
+:disappointed: If you just [NEED TO LEARN PYTHON NOW][ln_python_colab] you can establish yourself
 as a python user without any of the foundational concepts. _(not recommended)_
 
-**Originally Produced for Giocomo Lab rotation labbies by Linnie Jiang and Tucker Fisher**.
+**Originally produced for Giocomo Lab rotation labbies by Linnie Jiang and Tucker Fisher**.
 
 _remember us when you are famous._ [:woman_technologist:][ln_linnie_twitter] [:man_mechanic:][ln_tucker_home]
 
@@ -51,10 +66,8 @@ _remember us when you are famous._ [:woman_technologist:][ln_linnie_twitter] [:m
 - [ ] Find a text editor you like ([VS Code][ln_vscode_dl], [Atom][ln_atom_dl], and [Sublime][ln_sublime_dl] are good options)
 - [ ] \[**GitHub.com users**\] Clone this repository onto your local machine.
 - [ ] \[**Everyone else**\] Download this repository onto your local machine.
-    - Select the green <kbd>code v</kbd> button where you can download [the
-      zip][ln_zip_of_repo].
-    - Don't worry about getting GitHub.com proficient until [the section on
-      git](#version-control-git--githubcom-octocat).
+    - Select the green <kbd>code v</kbd> button where you can download [the zip][ln_zip_of_repo].
+    - Don't worry about getting GitHub.com proficient until [the section on git](#version-control-git--githubcom-octocat).
 
 ---
 ---
@@ -147,7 +160,7 @@ $ brew --prefix # this command-flag-pair tells you where `brew` puts things
 
 This means our new python lives at `/usr/local/bin/python<version>`. By
 convention directories called `bin` contain "binaries", or compiled source
-code. Executables are also commonly placed in `bin` directories called.  We've
+code. Executables are also commonly placed in `bin` directories.  We've
 put in "\<version\>" as a placeholder for the _version_ since it could be 3.6,
 3.8, or 3.9 depending on what you have downloaded. 
 
@@ -168,8 +181,8 @@ $ which brewedpython
 
 #### Ubuntu (and Windows Subsystem for Linux)<a name="first-lesson-ubuntu"></a>
 
-We don't need an external package manger for Ubuntu because it isn't missing like
-it is on macOS.
+We don't need an external package manger for Ubuntu because it isn't missing (like
+it is on macOS).
 
 ```bash
 $ sudo add-apt-repository ppa:deadsnakes/ppa
@@ -186,19 +199,19 @@ $ which -a python3.9
 ## Python Lesson 2: Virtual Environments :disguised_face:
 
 Virtual environments are like workshops. A blacksmith shop is quite different
-than one a cabinet maker uses. The two disciplines have specialized tools
-for specialized uses. Critically for this metaphor, their raw materials, tools,
-and equipment might not mix. For example, having sawdust all over the floor
-will be pretty dangerous when sparks are flying.
+than of a furniture maker. The two disciplines have specialized tools for
+specialized uses. Critically for this metaphor, their raw materials, tools, and
+equipment might not mix. For example, having sawdust and dry wood scattered
+about would be pretty dangerous when sparks are flying.
 
 With python there is a potential for some pieces of software to conflict like
 this. Using virtual environments puts you in control; your workshop only has
-what you need and can prevent conflicts.
+what you need for a particular project and this will help prevent conflicts.
 
 Under the hood, when you **activate** your virtual environment the commands and
 paths that define it are placed at the top of your PATH until you
-**deactivate**. Run `echo $PATH` after you've activated the environment and you
-will see for yourself.
+**deactivate**. Run `echo $PATH` before (and then, after) you've activated the
+environment and you will see for yourself.
 
 #### Making A Virtual Environment
 
@@ -222,7 +235,7 @@ $ source ~/we_sick/bin/activate
 
 #### Stocking your Virtual Environment with Packages (Tools)
  
-`pip` (pip installs packages)
+`pip` (**p**ip **i**nstalls **p**ackages)
 
 ```bash
 (we_sick) $ pip list # shows you what you have installed
@@ -270,7 +283,7 @@ you to a bunch of basic python and numpy.
 
 ![Screen Shot 2021-12-09 at 1 28 33 PM](https://user-images.githubusercontent.com/26031420/145478775-3eb36b5a-2c98-4800-9485-39925eb1c3ba.png)
 
-#### Jupyter Kernels (more advanced)
+#### Jupyter Kernels (Bonus, more advanced)
 
 To run the juptyer using your virtual environment, you must first activate your
 environment and then start jupyter. Is there a way to just start jupyter and
@@ -308,7 +321,13 @@ $ jupyter notebook
 Like magic, your venv is now available. Make another venv and add it to the
 kernels, it will be there too.
 
-![Screen Shot 2021-12-09 at 1 59 42 PM](https://user-images.githubusercontent.com/26031420/145482739-bf25925c-0555-4075-89db-7797b7331d1b.png)
+<div align="center">
+<img
+src="https://user-images.githubusercontent.com/26031420/145482739-bf25925c-0555-4075-89db-7797b7331d1b.png" 
+width="40%"
+title="Using the 'New button' shows a the 'Python (we_sick)' kernel available."
+/>
+</div>
 
 
 ### Python Lesson 4: Anatomy of a Package
@@ -363,9 +382,10 @@ procedure called 'merging' to fold it into the main code.
 
 **Track Changes and Commits**
 
-In common word processing software (Google Docs, Microsoft Word, and
-LibreOffice) 'track changes' provides a non-destructive tool to record the
-when, who, and why of each change. The word processor tracks every keystroke
+In common word processing software (Google Docks, Microsoft Word, and
+LibreOffice) 'tracking changes' provides a non-destructive tool to record the
+who, when, and why of each change. The word processor tracks every keystroke
+
 and groups the changes by their spatial continuity in the document. In code,
 changes are perhaps--in my view--best organized by functional impact. Binding
 individual changes together is left up to the user. You must commit edited code
@@ -485,26 +505,38 @@ $ git merge some_random_feature
 With these [`git` basics and learning resources][ln_CNJCx_gitbasics] you should
 be on your way in no time!
 
-### Git Lesson 4: The `git` GitHub Relationship
+## Git Lesson 4: The `git` GitHub Relationship
 
-GitHub is a place to store a `git` repository remotely. But GitHub is more than
-just a storage area. It has a bunch of nice tools designed to help teams work on 
+GitHub is a place to store a `git` repository remotely. If you use `git ` and
+GitHub by yourself GitHub acts like a specialized cloud backup. But GitHub is more than
+just a storage area, it has a bunch of nice tools designed to help teams work on 
 repositories together. Mainly these tools help manage merging branches and commits
 from many contributors in parallel.
 
-### Git Lesson 5: Using a Template
+GitHub.com does a great job describing their role in this [Hello
+World][ln_hw_github].
+
+
+## Git Lesson 5: Using a Template
 
 This template has "all" the components you need to make a python package of
 your own (already setup for version control!). It is a skeleton that you can
 use to establish _package_ structure for your project.
 
 Getting started is as easy as hitting the ["Use this
-template"](https://github.com/tgfisher/ouroboros/generate) button.
+template"](https://github.com/tgfisher/ouroboros/generate) button. Clone this
+repository and clear out our code and replace it with yours: don't forget to
+fill in the `setup.py` file with the content that matches your code structure.
+
+---
+---
 
 ### BONUS STUFF
 
 ```bash
-$ printenv
+$ printenv # we used an enviromental variable `PATH` above, run this to see 
+           # _all_ your enviromental variables. Feel free to ask us if you 
+           # want to understand what these are.
 ```
 #### What Does 'Right' or 'Correct' Mean?
 
@@ -548,6 +580,7 @@ calls to get what you need.
 lines = matplotlib.pyplot.plot(x_data, y_data)
 fig = lines.get_figure()
 ax = lines.axes
+...
 ```
 
 ### Version control for jupyter notebooks
@@ -580,7 +613,7 @@ know that you are using `jupytext`. If you clone onto a new machine you've got t
 `pip install jupytext` and tell it to track._
 
 This command is going to track your notebook, stored at <notebook_path>, as a
-regular ipynb, a readable markdown (.md) file, and a runable python (.py) file, wow!
+regular ipynb, a readable markdown (.md) file, and a runnable python (.py) file, wow!
 
 ```bash
 $ jupytext --set-formats ipynb, py, md --sync <notebook_path>
@@ -607,3 +640,6 @@ $ jupytext --set-formats ipynb, py, md --sync <notebook_path>
 [ln_zip_of_repo]: https://github.com/tgfisher/ouroboros/archive/refs/heads/main.zip 
 [ln_python_colab]: https://google.com
 [ln_about_modules]: https://docs.python.org/3/tutorial/modules.html
+[ln_programmingmethods]: http://web.stanford.edu/class/cs106a/ 
+[ln_learnpythonthehardway]: https://learncodethehardway.org/python/
+[ln_hw_github]: https://docs.github.com/en/get-started/quickstart/hello-world
